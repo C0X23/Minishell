@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cmegret <cmegret@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: francis <francis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 15:20:31 by fallan            #+#    #+#             */
-/*   Updated: 2024/12/24 10:51:48 by cmegret          ###   ########.fr       */
+/*   Updated: 2024/12/24 12:13:16 by francis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static int	remove_whitespaces(const char *str, int i)
 	return (i);
 }
 
-int	ft_atoi(const char *str)
+int	ft_atoi_adapted(const char *str)
 {
 	long	nb;
 	int		i;
