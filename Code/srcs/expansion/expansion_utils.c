@@ -6,38 +6,46 @@
 /*   By: cmegret <cmegret@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 12:41:42 by cmegret           #+#    #+#             */
-/*   Updated: 2024/12/18 12:51:21 by cmegret          ###   ########.fr       */
+/*   Updated: 2024/12/24 10:39:44 by cmegret          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../header/Minishell.h"
 
 /**
- * @brief Joins two strings and frees the first one
+ * Joins two strings and frees the first one
  *
- * Concatenates s1 and s2 into a new string, then frees s1.
- * Similar to ft_strjoin but with automatic memory management for s1.
+ * @param s1 First string to join (will be freed)
+ * @param s2 Second string to join
  *
- * @param s1 First string (will be freed)
- * @param s2 Second string
- * @return New concatenated string or NULL if allocation fails
+ * @details
+ * Special cases:
+ * - If s1 is NULL, returns a copy of s2
+ * - If s2 is NULL, frees s1 and returns NULL
+ * 
+ * @note Memory management:
+ * - s1 is always freed
+ * - Caller must free the returned string
+ * - s2 is not freed
+ *
+ * @return New allocated string containing joined s1+s2,
+ * or NULL if allocation fails
  */
 char	*ft_strjoin_free(char *s1, char *s2)
 {
 	char	*result;
-	size_t	len1;
-	size_t	len2;
 
-	if (!s1 || !s2)
+	if (!s1)
+		return (ft_strdup(s2));
+	if (!s2)
+	{
+		free(s1);
 		return (NULL);
-	len1 = ft_strlen(s1);
-	len2 = ft_strlen(s2);
-	result = (char *)malloc(sizeof(char) * (len1 + len2 + 1));
+	}
+	result = ft_strjoin(s1, s2);
+	free(s1);
 	if (!result)
 		return (NULL);
-	ft_strlcpy(result, s1, len1 + 1);
-	ft_strlcat(result, s2, len1 + len2 + 1);
-	free(s1);
 	return (result);
 }
 
@@ -87,19 +95,31 @@ char	*convert_exit_status(int status)
 }
 
 /**
- * @brief Appends a single character to an existing string
+ * Appends a single character to a string
  *
- * @param str Original string (will be freed)
- * @param c Character to append
- * @return New string with character appended
+ * @param str The string to append to (will be freed)
+ * @param c   The character to append
+ *
+ * @details
+ * Creates a temporary string from the character and joins it
+ * to the input string using ft_strjoin_free
+ *
+ * @note Memory management:
+ * - Input string is freed internally
+ * - Returns newly allocated string
+ * - Caller must free the returned string
+ *
+ * @return New string with character appended, or NULL if allocation fails
  */
 char	*append_single_char(char *str, char c)
 {
 	char	tmp[2];
+	char	*result;
 
 	tmp[0] = c;
 	tmp[1] = '\0';
-	return (ft_strjoin_free(str, tmp));
+	result = ft_strjoin_free(str, tmp);
+	return (result);
 }
 
 /**

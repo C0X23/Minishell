@@ -6,7 +6,7 @@
 /*   By: cmegret <cmegret@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 14:37:29 by francis           #+#    #+#             */
-/*   Updated: 2024/12/18 12:55:56 by cmegret          ###   ########.fr       */
+/*   Updated: 2024/12/24 10:36:23 by cmegret          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,20 +54,34 @@ int	is_valid_filename(const char *filename)
 }
 
 /**
- * @brief Restores the original file descriptors
+ * Restores the saved input/output file descriptors for a command
  *
- * This function:
- * 1. Restores stdin and stdout to their original state
- * 2. Duplicates saved descriptors back to standard streams
- * 3. Closes the saved descriptors to prevent leaks
- *
- * @param cmd_list The command list containing the saved file descriptors
- * @note Both saved descriptors are closed after restoration
+ * @param cmd_list Pointer to the command structure containing
+ * saved file descriptors
+ * 
+ * @details
+ * This function restores the original file descriptors by:
+ * - Closing saved input FD if it's greater than 2 (not stdin/stdout/stderr)
+ * - Closing saved output FD if it's greater than 2
+ * - Resetting the saved FDs to -1 after closing
+ * 
+ * @note Prints error message to stderr if close() fails
+ * @return None
  */
 void	restore_redirections(t_command *cmd_list)
 {
-	dup2(cmd_list->saved_input, STDIN_FILENO);
-	dup2(cmd_list->saved_output, STDOUT_FILENO);
-	close(cmd_list->saved_input);
-	close(cmd_list->saved_output);
+	if (!cmd_list)
+		return ;
+	if (cmd_list->saved_input > 2)
+	{
+		if (close(cmd_list->saved_input) == -1)
+			perror("close error on saved input");
+		cmd_list->saved_input = -1;
+	}
+	if (cmd_list->saved_output > 2)
+	{
+		if (close(cmd_list->saved_output) == -1)
+			perror("close error on saved output");
+		cmd_list->saved_output = -1;
+	}
 }

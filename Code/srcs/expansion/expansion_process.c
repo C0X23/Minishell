@@ -6,12 +6,33 @@
 /*   By: cmegret <cmegret@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 12:41:45 by cmegret           #+#    #+#             */
-/*   Updated: 2024/12/21 10:07:46 by cmegret          ###   ########.fr       */
+/*   Updated: 2024/12/24 10:38:23 by cmegret          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../header/Minishell.h"
 
+/**
+ * Processes a single argument string for variable expansion
+ *
+ * @param str          The input string to process
+ * @param to_expand    Linked list of expansion points indicating where variables
+ *                     should be expanded
+ * @param shell_state  Current shell state containing environment variables
+ *
+ * @details
+ * Iterates through the input string character by character:
+ * 1. When '$' is encountered and expansion is marked:
+ *    - Extracts variable name
+ *    - Expands variable using shell state
+ *    - Appends expanded value to result
+ * 2. For non-expansion characters:
+ *    - Copies them directly to output
+ *
+ * @return Newly allocated string with variables expanded
+ *         Returns empty string if input is NULL
+ *         Caller must free the returned string
+ */
 char	*process_single_arg(char *str, t_expand *to_expand, t_shell_state *shell_state)
 {
 	char	*new_arg;
