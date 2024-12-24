@@ -16,24 +16,18 @@ ft_strcmp - Len								?
 ## Exit
 n.b.: `exit text` 2 sur Linux, 255 OS X
 
-exit -12345678945134678945615				✅
-exit 256									✅
-echo $?+$?									✅
-
 exit ""										❌
 - Bash: exit: : numeric argument required, exit code 255
 - Minishell: nothing, exit code 0
 
+exit -12345678945134678945615				✅
+exit 256									✅
+echo $?+$?									✅
 exit -0										✅
 exit -1										✅
+exit 777777777777777777777777				✅
+exit 78948561245367867897922				✅
 
-exit 777777777777777777777777				❌
-- bash: exit: 777777777777777777777777: numeric argument required, exit code 255
-- Minishell: nothing, exit code 113
-exit: 78948561245367867897922				❌
-
-- bash: exit: 78948561245367867897922: numeric argument required, exit code 255
-- Minishell: nothing, exit code 188
 
 `/bin/ls/filethatdoesntexist` ; `echo $?`   ?
 /bin/ls/filethatdoesntexist ; echo $?
