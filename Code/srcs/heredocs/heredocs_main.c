@@ -3,14 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   heredocs_main.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cmegret <cmegret@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: francis <francis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 17:27:25 by fallan            #+#    #+#             */
-/*   Updated: 2024/12/24 13:45:48 by cmegret          ###   ########.fr       */
+/*   Updated: 2024/12/27 18:22:03 by francis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../header/Minishell.h"
+
+// frees a heredoc
+void	ft_empty_heredoc(t_heredoc *heredoc_line)
+{
+	t_heredoc	*temp_heredoc;
+
+	while (heredoc_line)
+	{
+		temp_heredoc = heredoc_line;
+		heredoc_line = heredoc_line->next;
+		if (temp_heredoc->line)
+			free(temp_heredoc->line);
+		free(temp_heredoc);
+	}
+}
 
 /**
  * @brief Gère l'entrée d'un heredoc.
@@ -45,6 +60,8 @@ void	ft_handle_heredoc_input(t_redir *redir_list, t_shell_state *shell_state)
 		if (delimiter_found || g_signal)
 			break ;
 	}
+	if (g_signal)
+		ft_empty_heredoc(heredoc_line);
 	signal(SIGINT, handle_sigint);
 }
 
