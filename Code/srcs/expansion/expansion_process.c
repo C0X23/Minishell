@@ -3,17 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   expansion_process.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: francis <francis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cmegret <cmegret@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 12:41:45 by cmegret           #+#    #+#             */
-/*   Updated: 2024/12/27 15:07:34 by francis          ###   ########.fr       */
+/*   Updated: 2024/12/24 10:38:23 by cmegret          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../header/Minishell.h"
 
-char	*process_single_arg(char *str, t_expand *to_expand,
-	t_shell_state *shell_state)
+/**
+ * Processes a single argument string for variable expansion
+ *
+ * @param str          The input string to process
+ * @param to_expand    Linked list of expansion points indicating where variables
+ *                     should be expanded
+ * @param shell_state  Current shell state containing environment variables
+ *
+ * @details
+ * Iterates through the input string character by character:
+ * 1. When '$' is encountered and expansion is marked:
+ *    - Extracts variable name
+ *    - Expands variable using shell state
+ *    - Appends expanded value to result
+ * 2. For non-expansion characters:
+ *    - Copies them directly to output
+ *
+ * @return Newly allocated string with variables expanded
+ *         Returns empty string if input is NULL
+ *         Caller must free the returned string
+ */
+char	*process_single_arg(char *str, t_expand *to_expand, t_shell_state *shell_state)
 {
 	char	*new_arg;
 	char	var_name[256];
@@ -29,21 +49,21 @@ char	*process_single_arg(char *str, t_expand *to_expand,
 			if (to_expand->check)
 			{
 				k = 0;
-				i++;
+				i++;  // Skip '$' directement
 				if (to_expand->size_to_expand >= 1 && str[i])
 				{
 					while (k < to_expand->size_to_expand - 1 && str[i])
 						var_name[k++] = str[i++];
 					var_name[k] = '\0';
 					new_arg = expand_variable(new_arg, shell_state, var_name);
-					i--;
+					i--;  // Ajustement pour le i++ de la boucle principale
 				}
 				else
 				{
-					if (!str[i - 1])
+					if (!str[i - 1])  // Si c'était le dernier caractère
 						new_arg = append_single_char(new_arg, '$');
 					else
-						i--;
+						i--;  // Retour sur '$'
 				}
 			}
 			else

@@ -27,8 +27,7 @@ void	ft_pwd(t_shell_state *shell_state)
 	cwd = getcwd(NULL, 0);
 	if (cwd == NULL)
 	{
-		ft_print_error("pwd", NULL,
-			"getcwd: cannot access the current directory");
+		perror("getcwd");
 		shell_state->last_exit_status = 1;
 		return ;
 	}
