@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: francis <francis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cmegret <cmegret@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 13:55:06 by yourlogin         #+#    #+#             */
-/*   Updated: 2024/12/23 23:16:20 by francis          ###   ########.fr       */
+/*   Updated: 2024/12/24 13:59:22 by cmegret          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,6 +156,7 @@ void		check_arguments(int argc, char **argv, t_shell_state *shell_state);
 
 // Prompt
 char		*ft_prompt(int type);
+void		ft_print_error(char *cmd, char *arg, char *message);
 
 // Free
 void		ft_free_all(char *prompt, t_token *token_list, t_command *cmd);

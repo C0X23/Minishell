@@ -6,7 +6,7 @@
 /*   By: francis <francis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 16:31:14 by cmegret           #+#    #+#             */
-/*   Updated: 2024/12/24 12:13:48 by francis          ###   ########.fr       */
+/*   Updated: 2024/12/27 15:10:02 by francis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void	ft_exit(t_shell_state *shell_state, char **args, int exit_stat, int i)
 		else if (exit_input < 0)
 			exit_stat += 256;
 	}
-	clear_history(); // on 42 OS X iMacs; else rl_clear_history();
+	clear_history();
 	ft_free_shell_state(shell_state);
 	ft_putstr_fd("exit\n", STDOUT_FILENO);
 	exit(exit_stat);

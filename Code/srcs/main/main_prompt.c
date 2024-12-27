@@ -3,48 +3,53 @@
 /*                                                        :::      ::::::::   */
 /*   main_prompt.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cmegret <cmegret@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: francis <francis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 18:40:16 by cmegret           #+#    #+#             */
-/*   Updated: 2024/12/24 10:41:09 by cmegret          ###   ########.fr       */
+/*   Updated: 2024/12/27 15:07:05 by francis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../header/Minishell.h"
 
 /**
- * Creates a formatted prompt message for the shell
+ * @brief Prints a formatted error message to standard error.
  *
- * @param last_folder Current working directory's last folder name
+ * This function displays a bash-style error message on STDERR (fd 2).
+ * Format: "minishell: [cmd]: [arg]: message\n"
+ * Both cmd and arg parameters are optional and can be NULL.
  *
- * @details
- * Builds a prompt string in the format:
- * "➜  {last_folder} (Minishell) : "
- *
- * @note Memory management:
- * - Returns newly allocated string
- * - Caller must free the returned string
- * - Handles intermediate memory allocations internally
- *
- * @return Formatted prompt string, or NULL if allocation fails
+ * @param cmd The command that generated the error (can be NULL)
+ * @param arg The argument that caused the error (can be NULL)
+ * @param message The main error message to display
  */
-static char	*ft_create_message_prompt(char *last_folder)
+void	ft_print_error(char *cmd, char *arg, char *message)
 {
-	char	*message;
-	char	*tmp;
-
-	message = ft_strjoin("➜  ", last_folder);
-	tmp = ft_strjoin(message, " (");
-	free(message);
-	message = ft_strjoin(tmp, "Minishell");
-	free(tmp);
-	tmp = ft_strjoin(message, ") : ");
-	free(message);
-	return (tmp);
+	ft_putstr_fd("minishell: ", 2);
+	if (cmd)
+	{
+		ft_putstr_fd(cmd, 2);
+		ft_putstr_fd(": ", 2);
+	}
+	if (arg)
+	{
+		ft_putstr_fd(arg, 2);
+		ft_putstr_fd(": ", 2);
+	}
+	ft_putendl_fd(message, 2);
 }
 
 /**
- * Generates the shell prompt based on context
+ * @brief Generates the appropriate prompt based on context
+ *
+ * Creates either:
+ * 1. A simple heredoc prompt ("> ")
+ * 2. A full custom prompt with current directory and shell info
+ *
+ * Error handling:
+ * - Returns simple "Minishell : " prompt if getcwd fails
+ * - Exits with failure status on memory allocation errors
+ * - Handles invalid path formats gracefully
  *
  * @param type REDIR_HEREDOC for heredoc prompt, 0 for normal prompt
  *

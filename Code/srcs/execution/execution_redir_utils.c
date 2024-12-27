@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_redir_utils.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cmegret <cmegret@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: francis <francis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 14:37:29 by francis           #+#    #+#             */
-/*   Updated: 2024/12/24 10:36:23 by cmegret          ###   ########.fr       */
+/*   Updated: 2024/12/27 15:09:34 by francis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,35 +53,48 @@ int	is_valid_filename(const char *filename)
 	return (1);
 }
 
-/**
- * Restores the saved input/output file descriptors for a command
- *
- * @param cmd_list Pointer to the command structure containing
- * saved file descriptors
- * 
- * @details
- * This function restores the original file descriptors by:
- * - Closing saved input FD if it's greater than 2 (not stdin/stdout/stderr)
- * - Closing saved output FD if it's greater than 2
- * - Resetting the saved FDs to -1 after closing
- * 
- * @note Prints error message to stderr if close() fails
- * @return None
- */
 void	restore_redirections(t_command *cmd_list)
 {
-	if (!cmd_list)
-		return ;
 	if (cmd_list->saved_input > 2)
 	{
-		if (close(cmd_list->saved_input) == -1)
-			perror("close error on saved input");
-		cmd_list->saved_input = -1;
+		if (dup2(cmd_list->saved_input, STDIN_FILENO) != -1)
+			close(cmd_list->saved_input);
 	}
 	if (cmd_list->saved_output > 2)
 	{
-		if (close(cmd_list->saved_output) == -1)
-			perror("close error on saved output");
-		cmd_list->saved_output = -1;
+		if (dup2(cmd_list->saved_output, STDOUT_FILENO) != -1)
+			close(cmd_list->saved_output);
 	}
+	cmd_list->saved_input = -1;
+	cmd_list->saved_output = -1;
+}
+
+int	save_standard_fds(t_command *cmd)
+{
+	cmd->saved_input = dup(STDIN_FILENO);
+	if (cmd->saved_input == -1)
+		return (-1);
+	cmd->saved_output = dup(STDOUT_FILENO);
+	if (cmd->saved_output == -1)
+	{
+		close(cmd->saved_input);
+		return (-1);
+	}
+	return (0);
+}
+
+int	process_single_redirection(t_redir *redir, t_shell_state *shell_state)
+{
+	if (validate_redirection(redir, shell_state) == -1)
+		return (-1);
+	if (redir->type == REDIR_OUTPUT
+		&& handle_redir_output(redir, shell_state) == -1)
+		return (-1);
+	if (redir->type == REDIR_APPEND
+		&& handle_redir_append(redir, shell_state) == -1)
+		return (-1);
+	if (redir->type == REDIR_INPUT
+		&& handle_redir_input(redir, shell_state) == -1)
+		return (-1);
+	return (0);
 }
