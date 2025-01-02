@@ -39,7 +39,8 @@ class ShellTest(unittest.TestCase):
         return output
 
     def test_commands(self):
-        commands = ['ls', 'echo "Hello World"', 'pwd', 'whoami', 'ls -la']
+        with open('tester_commands.txt', 'r') as file:
+            commands = [line.strip() for line in file.readlines()]
         max_cmd_length = max(len(cmd) for cmd in commands)
         for cmd in commands:
             with self.subTest(cmd=cmd):

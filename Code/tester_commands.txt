@@ -1,0 +1,5 @@
+ls
+echo "Hello world"
+pwd
+whoami
+ls -la
