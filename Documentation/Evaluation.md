@@ -1,10 +1,19 @@
 # Minishell Evaluation - preparation
-
 ## TO DO
+- Check Minishell project version !
+- Heredocs + ctrl-c
+- Leaks : leaks, fsanitize, valgrind (double free check)
+- Python tester (with Valgrind ?)
+- Norm check
+
+## To check
+- Signals: ctrl-\, ctrl-d, ctrl-c
+- Expansions, quotes in heredocs
+
+## Other to do
 - Preparing expansions in heredocs
 - Errors: Write to stderr (2)
 - Rl_clear_history: au bon endroit ?
-- Python tester (with Valgrind ?)
 
 ## Bugs dans notre shell:
 ## Other bugs to check (ahanzi)

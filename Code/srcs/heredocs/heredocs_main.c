@@ -6,7 +6,7 @@
 /*   By: francis <francis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 17:27:25 by fallan            #+#    #+#             */
-/*   Updated: 2024/12/27 18:22:03 by francis          ###   ########.fr       */
+/*   Updated: 2024/12/27 18:55:13 by francis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,8 @@ void	ft_handle_heredoc_input(t_redir *redir_list, t_shell_state *shell_state)
 		if (delimiter_found || g_signal)
 			break ;
 	}
-	if (g_signal)
-		ft_empty_heredoc(heredoc_line);
+	// if (g_signal)
+	// 	ft_empty_heredoc(heredoc_line);
 	signal(SIGINT, handle_sigint);
 }
 

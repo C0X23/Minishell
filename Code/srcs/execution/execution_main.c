@@ -6,7 +6,7 @@
 /*   By: francis <francis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 14:37:18 by francis           #+#    #+#             */
-/*   Updated: 2024/12/27 17:08:25 by francis          ###   ########.fr       */
+/*   Updated: 2024/12/27 19:25:02 by francis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ void	execute_child(t_command *cmd_list,
 
 	setup_file_descriptors(cmd_list, in_fd, fd);
 	shell_state->last_exit_status = 0;
-	if (has_heredoc(cmd_list))
+	if (has_heredoc(cmd_list) && !g_signal)
 		setup_heredoc_input(cmd_list);
 	configure_redirections(cmd_list, shell_state);
 	if (shell_state->last_exit_status != 0)
