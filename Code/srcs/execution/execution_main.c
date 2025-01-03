@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_main.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cmegret <cmegret@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: fallan <fallan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 14:37:18 by francis           #+#    #+#             */
-/*   Updated: 2025/01/03 08:10:30 by cmegret          ###   ########.fr       */
+/*   Updated: 2025/01/03 15:46:47 by fallan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,13 +50,14 @@ void	handle_parent(int in_fd, int *fd)
  */
 void	setup_file_descriptors(t_command *cmd_list, int in_fd, int *fd)
 {
-	if (in_fd != 0)
+	(void)cmd_list;
+	if (in_fd != STDIN_FILENO && in_fd != -1)
 	{
 		if (dup2(in_fd, STDIN_FILENO) == -1)
 			error_and_exit("dup2 failed", 1);
 		close(in_fd);
 	}
-	if (cmd_list->next)
+	if (fd[1] != STDOUT_FILENO && fd[1] != -1)
 	{
 		if (dup2(fd[1], STDOUT_FILENO) == -1)
 			error_and_exit("dup2 failed", 1);
