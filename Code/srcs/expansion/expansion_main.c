@@ -6,7 +6,7 @@
 /*   By: cmegret <cmegret@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 12:41:47 by cmegret           #+#    #+#             */
-/*   Updated: 2025/01/03 08:55:57 by cmegret          ###   ########.fr       */
+/*   Updated: 2025/01/03 14:36:29 by cmegret          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ void	process_command_args(t_command *cmd, t_shell_state *shell_state)
 		current->arg_string = new_arg;
 		current = current->next;
 		if (i == 0)
-			cmd->cmd_name = ft_strdup(new_arg);
+			cmd->cmd_name = new_arg;
 		i++;
 	}
 }

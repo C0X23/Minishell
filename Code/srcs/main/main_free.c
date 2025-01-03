@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_free.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: francis <francis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cmegret <cmegret@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 14:36:57 by francis           #+#    #+#             */
-/*   Updated: 2024/12/27 17:17:58 by francis          ###   ########.fr       */
+/*   Updated: 2025/01/03 14:29:11 by cmegret          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void	ft_free_cmd_list(t_command *cmd)
 			close(cmd->saved_output);
 		cmd = cmd->next;
 		free(temp_cmd);
+		temp_cmd = NULL;
 	}
 }
 
@@ -63,9 +64,11 @@ void	ft_free_array_of_strings(char **args)
 	{
 		temp_arg = args[i];
 		free(temp_arg);
+		args[i] = NULL;
 		i++;
 	}
 	free(args);
+	args = NULL;
 }
 
 /**
@@ -91,6 +94,7 @@ void	ft_free_arg_list(t_cmd_args	*arg_list)
 		arg_list->arg_string = NULL;
 		arg_list = arg_list->next;
 		free(temp);
+		temp = NULL;
 	}
 }
 
@@ -113,14 +117,18 @@ void	ft_free_redir_list(t_redir *redir_list)
 		temp_redir = redir_list;
 		if (redir_list->str)
 			free(redir_list->str);
+		redir_list->str = NULL;
 		while (redir_list->heredoc)
 		{
 			temp_heredoc = redir_list->heredoc;
 			redir_list->heredoc = redir_list->heredoc->next;
 			free(temp_heredoc->line);
+			temp_heredoc->line = NULL;
 			free(temp_heredoc);
+			temp_heredoc = NULL;
 		}
 		redir_list = redir_list->next;
 		free(temp_redir);
+		temp_redir = NULL;
 	}
 }

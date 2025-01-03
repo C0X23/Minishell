@@ -6,7 +6,7 @@
 /*   By: cmegret <cmegret@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 14:37:29 by francis           #+#    #+#             */
-/*   Updated: 2025/01/03 11:56:21 by cmegret          ###   ########.fr       */
+/*   Updated: 2025/01/03 15:19:16 by cmegret          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,12 @@ int	handle_redir_output(t_redir *redir, t_shell_state *shell_state)
 		shell_state->last_exit_status = 1;
 		return (-1);
 	}
-	dup2(fd, STDOUT_FILENO);
+	if (dup2(fd, STDOUT_FILENO) == -1)
+	{
+		perror("minishell: failed to redirect STDOUT");
+		close(fd);
+		return (-1);
+	}
 	close(fd);
 	return (0);
 }
@@ -61,7 +66,12 @@ int	handle_redir_append(t_redir *redir, t_shell_state *shell_state)
 		shell_state->last_exit_status = 1;
 		return (-1);
 	}
-	dup2(fd, STDOUT_FILENO);
+	if (dup2(fd, STDOUT_FILENO) == -1)
+	{
+		perror("minishell: failed to redirect STDOUT");
+		close(fd);
+		return (-1);
+	}
 	close(fd);
 	return (0);
 }
@@ -87,7 +97,12 @@ int	handle_redir_input(t_redir *redir, t_shell_state *shell_state)
 		shell_state->last_exit_status = 1;
 		return (-1);
 	}
-	dup2(fd, STDIN_FILENO);
+	if (dup2(fd, STDIN_FILENO) == -1)
+	{
+		perror("minishell: failed to redirect STDIN");
+		close(fd);
+		return (-1);
+	}
 	close(fd);
 	return (0);
 }
