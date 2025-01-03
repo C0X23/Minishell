@@ -6,7 +6,7 @@
 /*   By: cmegret <cmegret@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 14:37:29 by francis           #+#    #+#             */
-/*   Updated: 2025/01/03 15:18:42 by cmegret          ###   ########.fr       */
+/*   Updated: 2025/01/03 16:24:45 by cmegret          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,15 +73,30 @@ void	restore_redirections(t_command *cmd_list)
 
 int	save_standard_fds(t_command *cmd)
 {
+	cmd->saved_input = -1;
+	cmd->saved_output = -1;
+
+	// Try to dup STDIN
 	cmd->saved_input = dup(STDIN_FILENO);
 	if (cmd->saved_input == -1)
+	{
+		perror("minishell: failed to dup STDIN");
 		return (-1);
+	}
+
+	// Try to dup STDOUT
 	cmd->saved_output = dup(STDOUT_FILENO);
 	if (cmd->saved_output == -1)
 	{
-		close(cmd->saved_input);
+		perror("minishell: failed to dup STDOUT");
+		if (cmd->saved_input != -1)
+		{
+			close(cmd->saved_input);
+			cmd->saved_input = -1;
+		}
 		return (-1);
 	}
+
 	return (0);
 }
 
