@@ -6,7 +6,7 @@
 /*   By: cmegret <cmegret@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 14:37:29 by francis           #+#    #+#             */
-/*   Updated: 2025/01/03 08:58:35 by cmegret          ###   ########.fr       */
+/*   Updated: 2025/01/03 11:56:21 by cmegret          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,13 +129,21 @@ void	configure_redirections(t_command *cmd, t_shell_state *shell_state)
 	t_redir	*redir;
 
 	if (save_standard_fds(cmd) == -1)
+	{
+		perror("minishell: failed to save standard file descriptors");
 		return ;
+	}
 	redir = cmd->redir_list;
 	while (redir)
 	{
 		if (redir->type != REDIR_HEREDOC)
+		{
 			if (process_single_redirection(redir, shell_state) == -1)
+			{
+				restore_redirections(cmd);
 				return ;
+			}
+		}
 		redir = redir->next;
 	}
 }

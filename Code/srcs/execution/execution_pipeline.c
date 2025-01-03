@@ -76,7 +76,11 @@ pid_t	execute_pipeline(t_command *cmd_list,
 	else if (pid < 0)
 		error_and_exit("fork failed", 1);
 	else
+	{
 		handle_parent(in_fd, fd);
+		if (cmd_list->skip_execution)
+			shell_state->last_exit_status = 127;
+	}
 	if (cmd_list->next)
 		*next_in_fd = fd[0];
 	else

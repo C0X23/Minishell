@@ -6,7 +6,7 @@
 /*   By: cmegret <cmegret@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 14:37:29 by francis           #+#    #+#             */
-/*   Updated: 2024/12/24 14:08:54 by cmegret          ###   ########.fr       */
+/*   Updated: 2025/01/03 11:52:14 by cmegret          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,15 +55,17 @@ int	is_valid_filename(const char *filename)
 
 void	restore_redirections(t_command *cmd_list)
 {
-	if (cmd_list->saved_input > 2)
+	if (cmd_list->saved_input >= 0)
 	{
-		if (dup2(cmd_list->saved_input, STDIN_FILENO) != -1)
-			close(cmd_list->saved_input);
+		if (dup2(cmd_list->saved_input, STDIN_FILENO) == -1)
+			perror("minishell: failed to restore STDIN");
+		close(cmd_list->saved_input);
 	}
-	if (cmd_list->saved_output > 2)
+	if (cmd_list->saved_output >= 0)
 	{
-		if (dup2(cmd_list->saved_output, STDOUT_FILENO) != -1)
-			close(cmd_list->saved_output);
+		if (dup2(cmd_list->saved_output, STDOUT_FILENO) == -1)
+			perror("minishell: failed to restore STDOUT");
+		close(cmd_list->saved_output);
 	}
 	cmd_list->saved_input = -1;
 	cmd_list->saved_output = -1;
